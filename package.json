@@ -1,0 +1,35 @@
+{
+  "name": "permission",
+  "version": "0.0.1",
+  "description": "permission to access a file on the tradle network",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tradle/permission.git"
+  },
+  "keywords": [
+    "bitcoin",
+    "blockchain",
+    "tradle",
+    "access",
+    "control"
+  ],
+  "author": "Mark Vayngrib <mark.vayngrib@lablz.com> (http://github.com/mvayngrib)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tradle/permission/issues"
+  },
+  "homepage": "https://github.com/tradle/permission#readme",
+  "devDependencies": {
+    "bitcoinjs-lib": "^1.5.7",
+    "buffer-equal": "0.0.1",
+    "tape": "^4.0.0"
+  },
+  "dependencies": {
+    "bitcoinjs-lib": "^1.5.7",
+    "tradle-utils": "git://github.com/tradle/tradle-utils.git"
+  }
+}
