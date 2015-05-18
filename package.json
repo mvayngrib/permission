@@ -1,5 +1,5 @@
 {
-  "name": "permission",
+  "name": "tradle-permission",
   "version": "0.0.1",
   "description": "permission to access a file on the tradle network",
   "main": "index.js",
@@ -26,10 +26,10 @@
   "devDependencies": {
     "bitcoinjs-lib": "^1.5.7",
     "buffer-equal": "0.0.1",
-    "tape": "^4.0.0"
+    "tape": "^4.0.0",
+    "tradle-tx-data": "git+https://github.com/mvayngrib/tx-data.git"
   },
   "dependencies": {
-    "bitcoinjs-lib": "^1.5.7",
     "tradle-utils": "git://github.com/tradle/tradle-utils.git"
   }
 }
