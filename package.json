@@ -30,6 +30,6 @@
     "tradle-tx-data": "git+https://github.com/mvayngrib/tx-data.git"
   },
   "dependencies": {
-    "tradle-utils": "git://github.com/tradle/tradle-utils.git"
+    "tradle-utils": "^0.1.3"
   }
 }
