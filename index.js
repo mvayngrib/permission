@@ -36,14 +36,12 @@ Permission.prototype.encryptKey = function(encryptionKey) {
 Permission.prototype.build = function(cb) {
   var self = this;
 
-  utils.getStorageKeyFor(this._cleartext, function(err, key) {
-    if (err) return cb(err)
-
-    if (!self._encryptBody) return finish(null, key)
-
-    self._cipherbuf = utils.encrypt(self._cleartext, self._encryptionKey);
-    utils.getStorageKeyFor(self._cipherbuf, finish);
-  })
+  if (this._encryptBody) {
+    this._cipherbuf = utils.encrypt(this._cleartext, this._encryptionKey)
+    utils.getStorageKeyFor(this._cipherbuf, finish)
+  } else {
+    utils.getStorageKeyFor(this._cleartext, finish)
+  }
 
   function finish(err, key) {
     if (err) return cb(err)
