@@ -1,6 +1,6 @@
 'use strict';
 
-var utils = require('tradle-utils');
+var utils = require('@tradle/utils');
 var assert = require('assert');
 var ENCODING = 'base64'
 

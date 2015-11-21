@@ -1,10 +1,10 @@
 
 var crypto = require('crypto')
 var test = require('tape')
-var ECKey = require('bitcoinjs-lib').ECKey
-var utils = require('tradle-utils')
+var ECKey = require('@tradle/bitcoinjs-lib').ECKey
+var utils = require('@tradle/utils')
 var bufferEqual = require('buffer-equal')
-var TxData = require('tradle-tx-data').TxData
+var TxData = require('@tradle/tx-data').TxData
 var Permission = require('../')
 
 test('permission file', function(t) {
