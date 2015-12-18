@@ -30,6 +30,6 @@
     "@tradle/tx-data": "^0"
   },
   "dependencies": {
-    "@tradle/utils": "^0.2.2"
+    "@tradle/utils": "^0.3.1"
   }
 }
