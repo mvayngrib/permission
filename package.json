@@ -27,10 +27,9 @@
     "@tradle/bitcoinjs-lib": "^1.5.7",
     "buffer-equal": "0.0.1",
     "tape": "^4.0.0",
-    "@tradle/tx-data": "^0"
+    "@tradle/tx-data": "^1.0.0"
   },
   "dependencies": {
-    "@tradle/tx-data": "^1.0.0",
     "@tradle/utils": "^1.0.0"
   }
 }
