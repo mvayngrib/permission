@@ -37,8 +37,15 @@ Permission.prototype.build = function(cb) {
   var self = this;
 
   if (this._encryptBody) {
-    this._cipherbuf = utils.encrypt(this._cleartext, this._encryptionKey)
-    utils.getStorageKeyFor(this._cipherbuf, finish)
+    utils.encryptAsync({
+      data: this._cleartext,
+      key: this._encryptionKey
+    }, function (err, cipherbuf) {
+      if (err) return cb(err)
+
+      self._cipherbuf = cipherbuf
+      utils.getStorageKeyFor(self._cipherbuf, finish)
+    })
   } else {
     utils.getStorageKeyFor(this._cleartext, finish)
   }
@@ -48,10 +55,18 @@ Permission.prototype.build = function(cb) {
 
     self._key = key;
     if (self._encryptKey) {
-      self._encryptedKey = utils.encrypt(self._key, self._encryptionKey);
-    }
+      utils.encryptAsync({
+        data: self._key,
+        key: self._encryptionKey
+      }, function (err, encryptedKey) {
+        if (err) return cb(err)
 
-    cb()
+        self._encryptedKey = encryptedKey
+        cb()
+      });
+    } else {
+      cb()
+    }
   }
 }
 
@@ -100,22 +115,34 @@ Permission.prototype.decryptionKeyBuf = function() {
 //   return utils.decrypt(encryptedKey, permissionEncryptionKey);
 // }
 
-Permission.recover = function(data, encryptionKey) {
+Permission.recover = function(data, encryptionKey, cb) {
   if (typeof data === 'string') data = new Buffer(data);
 
   // var permissionEncryptionKey = utils.sharedEncryptionKey(myPrivKey, theirPubKey);
-  if (encryptionKey) data = utils.decrypt(data, encryptionKey);
-
-  var json = data.toString();
-  var body;
-  try {
-    body = JSON.parse(json);
-  } catch (err) {
-    throw new Error('Permission body is not valid json');
+  if (encryptionKey) {
+    utils.decryptAsync({
+      data: data,
+      key: encryptionKey
+    }, function (err, decrypted) {
+      data = decrypted
+      finish()
+    });
+  } else {
+    finish()
   }
 
-  assert('key' in body && 'decryptionKey' in body, 'Invalid permission contents');
-  return new Permission(body.key, body.decryptionKey);
+  function finish () {
+    var json = data.toString();
+    var body;
+    try {
+      body = JSON.parse(json);
+    } catch (err) {
+      cb(new Error('Permission body is not valid json'))
+    }
+
+    assert('key' in body && 'decryptionKey' in body, 'Invalid permission contents');
+    cb(null, new Permission(body.key, body.decryptionKey))
+  }
 }
 
 module.exports = Permission;

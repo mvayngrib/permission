@@ -27,13 +27,15 @@ test('permission file', function(t) {
 
     var encryptedPermission = permission.data()
     decryptionKey = utils.sharedEncryptionKey(key2.d, key1.pub)
-    decryptedPermission = Permission.recover(encryptedPermission, decryptionKey)
-
-    decryptedPermission.build(function(err) {
+    Permission.recover(encryptedPermission, decryptionKey, function (err, decryptedPermission) {
       if (err) throw err
 
-      t.ok(bufferEqual(encryptionKey, decryptionKey))
-      t.deepEqual(decryptedPermission.body(), permission.body())
+      decryptedPermission.build(function(err) {
+        if (err) throw err
+
+        t.ok(bufferEqual(encryptionKey, decryptionKey))
+        t.deepEqual(decryptedPermission.body(), permission.body())
+      })
     })
   })
 })
@@ -70,23 +72,31 @@ test('permission file + transaction construction, reconstruction', function(t) {
 
     // #2
     t.ok(bufferEqual(parsedPermissionKey, encryptedPermissionKey));
-    // #3
 
     var decryptionKey = utils.sharedEncryptionKey(key2.d, key1.pub);
-    t.ok(bufferEqual(permission.key(), utils.decrypt(encryptedPermissionKey, decryptionKey)));
+
+    // #3
+    utils.decryptAsync({
+      data: encryptedPermissionKey,
+      key: decryptionKey
+    }, function (err, permissionKey) {
+      t.ok(bufferEqual(permission.key(), permissionKey));
+    })
 
     var permissionData = permission.data();
-    parsedPermission = Permission.recover(permissionData, decryptionKey);
-
-    parsedPermission.build(function(err) {
+    Permission.recover(permissionData, decryptionKey, function (err, parsedPermission) {
       if (err) throw err
 
-      // #4
-      t.deepEqual(parsedPermission.body(), permission.body());
-      // #5
-      t.ok(bufferEqual(fileHash, parsedPermission.fileKeyBuf()));
-      // #6
-      t.ok(bufferEqual(fileKey, parsedPermission.decryptionKeyBuf()));
+      parsedPermission.build(function(err) {
+        if (err) throw err
+
+        // #4
+        t.deepEqual(parsedPermission.body(), permission.body());
+        // #5
+        t.ok(bufferEqual(fileHash, parsedPermission.fileKeyBuf()));
+        // #6
+        t.ok(bufferEqual(fileKey, parsedPermission.decryptionKeyBuf()));
+      })
     })
   })
 })
